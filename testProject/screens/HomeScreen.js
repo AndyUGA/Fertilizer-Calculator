@@ -18,27 +18,54 @@ export default class App extends Component {
     let allowUserInput = false;
 
     this.state = {
+      testArray: [],
+      testArray2: [],
+
+      gradeData: [["Grade", "", "", ""]],
+      matchData: [["Match", 1, 2, 3]],
+
       testSplit: "",
       inputLabel: ["N", "P", "K"],
-      matchLabel: ["Match"],
-      foo1: "Grade",
-      foo2: "10-10-10",
-      foo3: 3,
-      foo4: 4
+      gradeTitle: "Grade",
+      grade1: "5-5-5",
+      grade2: "10-10-10",
+      grade3: "15-15-15",
+      matchTitle: ["Match"],
+      pLabel: "1",
+      kLabel: "2",
+      nLabel: "3",
+      matchValueLabel: "Match Value",
+      matchPValue: 800,
+      matchKValue: 1000,
+      matchNValue: 600
     };
+  }
+
+  switch() {
+    this.setState({
+      gradeData: [[this.state.gradeTitle, this.state.grade3, this.state.grade2, this.state.grade1]],
+      matchData: [[this.state.matchTitle, this.state.nLabel, this.state.kLabel, this.state.pLabel]]
+    });
   }
 
   render() {
     const state = this.state;
-    const poundsPerX = [[state.foo1, state.foo2, state.foo3, state.foo4]];
-    const tableHead = ["Col1", "Col2", "Col3"];
+
+    let match2 = [[state.matchTitle, state.nLabel, state.kLabel, state.pLabel]];
+    testArray = [state.grade1, "-4"];
+    testArray2 = [state.grade2, "-3"];
+    let matchValues = [[state.matchValueLabel, state.matchPValue, state.matchKValue, state.matchNValue]];
 
     return (
       <Container>
         <Content>
           <Table borderStyle={{ borderWidth: 2, borderColor: "#c8e1ff" }}>
-            <Rows data={poundsPerX} textStyle={styles.text} />
+            <Rows data={state.gradeData} textStyle={styles.text} />
+            <Rows data={state.matchData} textStyle={styles.text} />
           </Table>
+          <Button onPress={() => this.setState(this.switch())}>
+            <Text>Click Me!</Text>
+          </Button>
         </Content>
       </Container>
     );
