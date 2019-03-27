@@ -22,7 +22,7 @@ export default class App extends Component {
       testArray2: [],
 
       gradeData: [["Grade", "", "", ""]],
-      matchData: [["Match", 1, 2, 3]],
+      matchData: [["Match", "P", "K", "N"]],
 
       testSplit: "",
       inputLabel: ["N", "P", "K"],
@@ -31,9 +31,9 @@ export default class App extends Component {
       grade2: "10-10-10",
       grade3: "15-15-15",
       matchTitle: ["Match"],
-      pLabel: "1",
-      kLabel: "2",
-      nLabel: "3",
+      pLabel: "P",
+      kLabel: "K",
+      nLabel: "N",
       matchValueLabel: "Match Value",
       matchPValue: 800,
       matchKValue: 1000,
