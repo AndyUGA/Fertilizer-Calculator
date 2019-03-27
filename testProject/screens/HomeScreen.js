@@ -18,19 +18,11 @@ export default class App extends Component {
     let allowUserInput = false;
 
     this.state = {
-      testArray: [],
-      testArray2: [],
+      gradeData: [["Grade", "Match", "N", "P", "K", "N", "P", "K", "Score"], ["10-10-10", 800, 80, 80, 80, 20, 0, 20, 93]],
 
-      gradeData: [["Grade", "", "", ""]],
-      matchData: [["Match", "P", "K", "N"]],
+      basicArray: [["A", 95, 3], ["B", 100, 1], ["C", 75, 2]],
 
-      testSplit: "",
-      inputLabel: ["N", "P", "K"],
-      gradeTitle: "Grade",
-      grade1: "5-5-5",
-      grade2: "10-10-10",
-      grade3: "15-15-15",
-      matchTitle: ["Match"],
+      NPKLabel: ["", "N", "P", "K"],
       pLabel: "P",
       kLabel: "K",
       nLabel: "N",
@@ -41,29 +33,42 @@ export default class App extends Component {
     };
   }
 
+  loadLoop() {
+    let objs = [];
+
+    for (let i = 0; i < 4; i++) {
+      objs.push(i);
+    }
+    return objs;
+  }
+
+  sortArray() {
+    let tempArray = this.state.basicArray.sort(function(a, b) {
+      return b[1] - a[1];
+    });
+    this.setState({
+      basicArray: tempArray
+    });
+  }
+
   switch() {
     this.setState({
-      gradeData: [[this.state.gradeTitle, this.state.grade3, this.state.grade2, this.state.grade1]],
-      matchData: [[this.state.matchTitle, this.state.nLabel, this.state.kLabel, this.state.pLabel]]
+      gradeData: this.state.testData
     });
   }
 
   render() {
     const state = this.state;
 
-    let match2 = [[state.matchTitle, state.nLabel, state.kLabel, state.pLabel]];
-    testArray = [state.grade1, "-4"];
-    testArray2 = [state.grade2, "-3"];
-    let matchValues = [[state.matchValueLabel, state.matchPValue, state.matchKValue, state.matchNValue]];
+    const sd1 = [[state.basicArray[0][1]], [state.basicArray[1][1]], [state.basicArray[2][1]]];
 
     return (
       <Container>
         <Content>
           <Table borderStyle={{ borderWidth: 2, borderColor: "#c8e1ff" }}>
-            <Rows data={state.gradeData} textStyle={styles.text} />
-            <Rows data={state.matchData} textStyle={styles.text} />
+            <Rows data={state.gradeData} widthArr={state.widthArr} textStyle={styles.text} />
           </Table>
-          <Button onPress={() => this.setState(this.switch())}>
+          <Button onPress={() => this.setState(this.sortArray())}>
             <Text>Click Me!</Text>
           </Button>
         </Content>
