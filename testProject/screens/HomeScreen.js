@@ -18,7 +18,7 @@ export default class App extends Component {
     let allowUserInput = false;
 
     this.state = {
-      gradeData: [["Grade", "Match", "N", "P", "K", "N", "P", "K", "Score"], ["10-10-10", 800, 80, 80, 80, 20, 0, 20, 93]],
+      gradeData: [["Grade", "Match", "N", "P", "K", "N", "P", "K", "Score"], ["10-10-10", "P 800", 80, 80, 80, 20, 0, -20, 93], ["10-10-10", "K  1000", 100, 100, 100, 40, 20, 0, 100]],
 
       basicArray: [["A", 95, 3], ["B", 100, 1], ["C", 75, 2]],
 
@@ -43,11 +43,11 @@ export default class App extends Component {
   }
 
   sortArray() {
-    let tempArray = this.state.basicArray.sort(function(a, b) {
-      return b[1] - a[1];
+    let tempArray = this.state.gradeData.sort(function(a, b) {
+      return b[8] - a[8];
     });
     this.setState({
-      basicArray: tempArray
+      gradeData: tempArray
     });
   }
 
@@ -65,12 +65,29 @@ export default class App extends Component {
     return (
       <Container>
         <Content>
+          <ListItem>
+            <CheckBox onPress={() => this.setState(this.sortArray())} />
+            <Body>
+              <Text> 10 - 10 - 10</Text>
+            </Body>
+            <CheckBox onPress={() => this.setState(this.sortArray())} />
+            <Body>
+              <Text> 5 - 5 - 5</Text>
+            </Body>
+          </ListItem>
+          <ListItem>
+            <CheckBox onPress={() => this.setState(this.sortArray())} />
+            <Body>
+              <Text> 0 - 10 - 10</Text>
+            </Body>
+            <CheckBox onPress={() => this.setState(this.sortArray())} />
+            <Body>
+              <Text> 15 - 0 - 15</Text>
+            </Body>
+          </ListItem>
           <Table borderStyle={{ borderWidth: 2, borderColor: "#c8e1ff" }}>
             <Rows data={state.gradeData} widthArr={state.widthArr} textStyle={styles.text} />
           </Table>
-          <Button onPress={() => this.setState(this.sortArray())}>
-            <Text>Click Me!</Text>
-          </Button>
         </Content>
       </Container>
     );
