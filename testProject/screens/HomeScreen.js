@@ -20,7 +20,8 @@ export default class App extends Component {
     this.state = {
       gradeData: [["N", "P", "K", "N", "P", "K", "Score"], [1.38, 1.38, 1.38, 0.0, 0.46, 0.92, 87], [1.84, 1.84, 1.84, 0.46, 0.0, 0.46, 93]],
       nutrientsSuppliedLabel: [["Nutrients supplied", "Nutrients surplus or deficit"]],
-      basicArray: [["A", 95, 3], ["B", 100, 1], ["C", 75, 2]]
+      basicArray: [["A", 95, 3], ["B", 100, 1], ["C", 75, 2]],
+      widthArr: [160, 160]
     };
   }
 
