@@ -18,18 +18,9 @@ export default class App extends Component {
     let allowUserInput = false;
 
     this.state = {
-      gradeData: [["Grade", "Match", "N", "P", "K", "N", "P", "K", "Score"], ["10-10-10", "P 800", 80, 80, 80, 20, 0, -20, 93], ["10-10-10", "K  1000", 100, 100, 100, 40, 20, 0, 100]],
-
-      basicArray: [["A", 95, 3], ["B", 100, 1], ["C", 75, 2]],
-
-      NPKLabel: ["", "N", "P", "K"],
-      pLabel: "P",
-      kLabel: "K",
-      nLabel: "N",
-      matchValueLabel: "Match Value",
-      matchPValue: 800,
-      matchKValue: 1000,
-      matchNValue: 600
+      gradeData: [["N", "P", "K", "N", "P", "K", "Score"], [1.38, 1.38, 1.38, 0.0, 0.46, 0.92, 87], [1.84, 1.84, 1.84, 0.46, 0.0, 0.46, 93]],
+      nutrientsSuppliedLabel: [["Nutrients supplied", "Nutrients surplus or deficit"]],
+      basicArray: [["A", 95, 3], ["B", 100, 1], ["C", 75, 2]]
     };
   }
 
@@ -86,7 +77,8 @@ export default class App extends Component {
             </Body>
           </ListItem>
           <Table borderStyle={{ borderWidth: 2, borderColor: "#c8e1ff" }}>
-            <Rows data={state.gradeData} widthArr={state.widthArr} textStyle={styles.text} />
+            <Rows data={state.nutrientsSuppliedLabel} widthArr={state.widthArr} textStyle={styles.text} />
+            <Rows data={state.gradeData} textStyle={styles.text} />
           </Table>
         </Content>
       </Container>
