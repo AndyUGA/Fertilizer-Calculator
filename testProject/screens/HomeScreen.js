@@ -82,6 +82,17 @@ export default class App extends Component {
       currentNValue: 60,
       currentPValue: 80,
       currentKValue: 100,
+      foo: [
+        [
+          <TextInput
+            defaultValue="0"
+            placeholder="Enter value per acre"
+            onChangeText={inputtedValue => {
+              this.changeDefaultValue(inputtedValue);
+            }}
+          />
+        ]
+      ],
       caclulatedValue: [[0, 0, 0]],
       nutrientsSuppliedLabel: [["Nutrients supplied", "Nutrients surplus or deficit"]],
       gradeData: [["N", "P", "K", "N", "P", "K", "Score"], [1.38, 1.38, 1.38, 0.0, 0.46, 0.92, 87], [1.84, 1.84, 1.84, 0.46, 0.0, 0.46, 93]],
@@ -89,7 +100,8 @@ export default class App extends Component {
       basicArray: [["A", 95, 3], ["B", 100, 1], ["C", 75, 2]],
       nValue: 0,
       pValue: 0,
-      kValue: 0
+      kValue: 0,
+      pounds: "pounds"
     };
   }
 
@@ -153,6 +165,23 @@ export default class App extends Component {
           <Table borderStyle={{ borderWidth: 2, borderColor: "#c8e1ff" }}>
             <Rows data={state.NPKLabel} textStyle={styles.text} />
             <Rows data={state.inputData} textStyle={styles.text} />
+            <Form>
+              <Picker
+                mode="dropdown"
+                iosHeader="Select Grade"
+                iosIcon={<Icon name="arrow-down" />}
+                selectedValue={this.state.pounds}
+                onValueChange={value => {
+                  this.setState({ pounds: value }, () => {});
+                }}
+              >
+                <Picker.Item label="Pounds - Square Feet" value="Pounds-SF" />
+                <Picker.Item label="Pounds - Acre" value="Pounds-A" />
+                <Picker.Item label="Ounces - Square Feet" value="Ounces-SF" />
+                <Picker.Item label="Ounces - Acre" value="Ounces-A" />
+              </Picker>
+            </Form>
+            <Rows data={state.foo} textStyle={styles.text} />
             <Rows data={state.caclulatedValue} textStyle={styles.text} />
             <Rows data={state.nutrientsSuppliedLabel} widthArr={state.widthArr} textStyle={styles.text} />
             <Rows data={state.gradeData} textStyle={styles.text} />
