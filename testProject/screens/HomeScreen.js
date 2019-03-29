@@ -21,7 +21,70 @@ export default class App extends Component {
       gradeData: [["N", "P", "K", "N", "P", "K", "Score"], [1.38, 1.38, 1.38, 0.0, 0.46, 0.92, 87], [1.84, 1.84, 1.84, 0.46, 0.0, 0.46, 93]],
       nutrientsSuppliedLabel: [["Nutrients supplied", "Nutrients surplus or deficit"]],
       basicArray: [["A", 95, 3], ["B", 100, 1], ["C", 75, 2]],
-      widthArr: [160, 160]
+      widthArr: [160, 160],
+      defaultNValue: "60",
+      defaultPalue: "80",
+      defaultKValue: "100",
+      inputData: [
+        [
+          <Item>
+            <TextInput
+              defaultValue="60"
+              placeholder="Enter N value"
+              onChangeText={inputtedValue => {
+                this.changeDefaultValue(inputtedValue);
+              }}
+            />
+          </Item>,
+          <Item>
+            <TextInput
+              defaultValue="80"
+              placeholder="Enter P value"
+              onChangeText={inputtedValue => {
+                //this.displayInputtedP(inputtedValue);
+              }}
+            />
+          </Item>,
+          <Item>
+            <TextInput
+              defaultValue="100"
+              placeholder="Enter K value"
+              onChangeText={inputtedValue => {
+                //this.displayInputtedK(inputtedValue);
+              }}
+              onEndEditing={inputtedValue => {
+                //this.calculateSD();
+                //this.parseValue(this.state.defaultGrade);
+                //this.calculatePerAcre(this.state.defaultAcre);
+              }}
+            />
+          </Item>
+        ]
+      ],
+      checkBoxOptions: (
+        <ListItem>
+          <CheckBox onPress={() => this.setState(this.sortArray())} />
+          <Body>
+            <Text> 10 - 10 - 10</Text>
+          </Body>
+          <CheckBox onPress={() => this.setState(this.sortArray())} />
+          <Body>
+            <Text> 5 - 5 - 5</Text>
+          </Body>
+        </ListItem>
+      ),
+      checkBoxOptions2: (
+        <ListItem>
+          <CheckBox onPress={() => this.setState(this.sortArray())} />
+          <Body>
+            <Text> 0 - 10 - 10</Text>
+          </Body>
+          <CheckBox onPress={() => this.setState(this.sortArray())} />
+          <Body>
+            <Text> 15 - 0 - 15</Text>
+          </Body>
+        </ListItem>
+      )
     };
   }
 
@@ -36,7 +99,7 @@ export default class App extends Component {
 
   sortArray() {
     let tempArray = this.state.gradeData.sort(function(a, b) {
-      return b[8] - a[8];
+      return b[6] - a[6];
     });
     this.setState({
       gradeData: tempArray
@@ -49,6 +112,12 @@ export default class App extends Component {
     });
   }
 
+  changeDefaultValue(inputtedValue) {
+    this.setState({
+      defaultNValue: inputtedValue
+    });
+  }
+
   render() {
     const state = this.state;
 
@@ -57,27 +126,11 @@ export default class App extends Component {
     return (
       <Container>
         <Content>
-          <ListItem>
-            <CheckBox onPress={() => this.setState(this.sortArray())} />
-            <Body>
-              <Text> 10 - 10 - 10</Text>
-            </Body>
-            <CheckBox onPress={() => this.setState(this.sortArray())} />
-            <Body>
-              <Text> 5 - 5 - 5</Text>
-            </Body>
-          </ListItem>
-          <ListItem>
-            <CheckBox onPress={() => this.setState(this.sortArray())} />
-            <Body>
-              <Text> 0 - 10 - 10</Text>
-            </Body>
-            <CheckBox onPress={() => this.setState(this.sortArray())} />
-            <Body>
-              <Text> 15 - 0 - 15</Text>
-            </Body>
-          </ListItem>
+          {state.checkBoxOptions}
+          {state.checkBoxOptions2}
+
           <Table borderStyle={{ borderWidth: 2, borderColor: "#c8e1ff" }}>
+            <Rows data={state.inputData} textStyle={styles.text} />
             <Rows data={state.nutrientsSuppliedLabel} widthArr={state.widthArr} textStyle={styles.text} />
             <Rows data={state.gradeData} textStyle={styles.text} />
           </Table>
