@@ -18,17 +18,36 @@ export default class App extends Component {
     let allowUserInput = false;
 
     this.state = {
-      gradeData: [["N", "P", "K", "N", "P", "K", "Score"], [1.38, 1.38, 1.38, 0.0, 0.46, 0.92, 87], [1.84, 1.84, 1.84, 0.46, 0.0, 0.46, 93]],
-      nutrientsSuppliedLabel: [["Nutrients supplied", "Nutrients surplus or deficit"]],
-      basicArray: [["A", 95, 3], ["B", 100, 1], ["C", 75, 2]],
-      widthArr: [160, 160],
-      defaultNValue: "60",
-      defaultPalue: "80",
-      defaultKValue: "100",
+      checkBoxOptions: (
+        <ListItem>
+          <CheckBox onPress={() => this.setState(this.sortArray())} />
+          <Body>
+            <Text> 10 - 10 - 10</Text>
+          </Body>
+          <CheckBox onPress={() => this.setState(this.sortArray())} />
+          <Body>
+            <Text> 5 - 5 - 5</Text>
+          </Body>
+        </ListItem>
+      ),
+      checkBoxOptions2: (
+        <ListItem>
+          <CheckBox onPress={() => this.setState(this.sortArray())} />
+          <Body>
+            <Text> 0 - 10 - 10</Text>
+          </Body>
+          <CheckBox onPress={() => this.setState(this.sortArray())} />
+          <Body>
+            <Text> 15 - 0 - 15</Text>
+          </Body>
+        </ListItem>
+      ),
+      NPKLabel: [["N", "P", "K"]],
       inputData: [
         [
           <Item>
             <TextInput
+              textAlign="center"
               defaultValue="60"
               placeholder="Enter N value"
               onChangeText={inputtedValue => {
@@ -61,30 +80,11 @@ export default class App extends Component {
           </Item>
         ]
       ],
-      checkBoxOptions: (
-        <ListItem>
-          <CheckBox onPress={() => this.setState(this.sortArray())} />
-          <Body>
-            <Text> 10 - 10 - 10</Text>
-          </Body>
-          <CheckBox onPress={() => this.setState(this.sortArray())} />
-          <Body>
-            <Text> 5 - 5 - 5</Text>
-          </Body>
-        </ListItem>
-      ),
-      checkBoxOptions2: (
-        <ListItem>
-          <CheckBox onPress={() => this.setState(this.sortArray())} />
-          <Body>
-            <Text> 0 - 10 - 10</Text>
-          </Body>
-          <CheckBox onPress={() => this.setState(this.sortArray())} />
-          <Body>
-            <Text> 15 - 0 - 15</Text>
-          </Body>
-        </ListItem>
-      )
+      nutrientsSuppliedLabel: [["Nutrients supplied", "Nutrients surplus or deficit"]],
+      gradeData: [["N", "P", "K", "N", "P", "K", "Score"], [1.38, 1.38, 1.38, 0.0, 0.46, 0.92, 87], [1.84, 1.84, 1.84, 0.46, 0.0, 0.46, 93]],
+      widthArr: [160, 160],
+      basicArray: [["A", 95, 3], ["B", 100, 1], ["C", 75, 2]],
+      NAcreValue: 0
     };
   }
 
@@ -121,7 +121,7 @@ export default class App extends Component {
   render() {
     const state = this.state;
 
-    const sd1 = [[state.basicArray[0][1]], [state.basicArray[1][1]], [state.basicArray[2][1]]];
+    //const sd1 = [[state.basicArray[0][1]], [state.basicArray[1][1]], [state.basicArray[2][1]]];
 
     return (
       <Container>
@@ -130,10 +130,12 @@ export default class App extends Component {
           {state.checkBoxOptions2}
 
           <Table borderStyle={{ borderWidth: 2, borderColor: "#c8e1ff" }}>
+            <Rows data={state.NPKLabel} textStyle={styles.text} />
             <Rows data={state.inputData} textStyle={styles.text} />
             <Rows data={state.nutrientsSuppliedLabel} widthArr={state.widthArr} textStyle={styles.text} />
             <Rows data={state.gradeData} textStyle={styles.text} />
           </Table>
+          <Text> {state.NAcreValue} </Text>
         </Content>
       </Container>
     );
