@@ -20,7 +20,7 @@ export default class App extends Component {
     this.state = {
       checkBoxOptions: (
         <ListItem>
-          <CheckBox onPress={() => this.setState(this.sortArray())} />
+          <CheckBox onPress={() => this.setState(this.sortArray(), this.calcuateAcreValue(1000))} />
           <Body>
             <Text> 10 - 10 - 10</Text>
           </Body>
@@ -47,7 +47,6 @@ export default class App extends Component {
         [
           <Item>
             <TextInput
-              textAlign="center"
               defaultValue="60"
               placeholder="Enter N value"
               onChangeText={inputtedValue => {
@@ -80,11 +79,17 @@ export default class App extends Component {
           </Item>
         ]
       ],
+      currentNValue: 60,
+      currentPValue: 80,
+      currentKValue: 100,
+      caclulatedValue: [[0, 0, 0]],
       nutrientsSuppliedLabel: [["Nutrients supplied", "Nutrients surplus or deficit"]],
       gradeData: [["N", "P", "K", "N", "P", "K", "Score"], [1.38, 1.38, 1.38, 0.0, 0.46, 0.92, 87], [1.84, 1.84, 1.84, 0.46, 0.0, 0.46, 93]],
       widthArr: [160, 160],
       basicArray: [["A", 95, 3], ["B", 100, 1], ["C", 75, 2]],
-      NAcreValue: 0
+      nValue: 0,
+      pValue: 0,
+      kValue: 0
     };
   }
 
@@ -118,6 +123,22 @@ export default class App extends Component {
     });
   }
 
+  calcuateAcreValue(value) {
+    let num1 = 43560 / +value;
+    let nValue = (this.state.currentNValue / num1).toFixed(2);
+    let pValue = (this.state.currentPValue / num1).toFixed(2);
+    let kValue = (this.state.currentKValue / num1).toFixed(2);
+
+    this.setState({
+      nValue: nValue,
+      pValue: pValue,
+      kValue: kValue,
+      caclulatedValue: [[nValue, pValue, kValue]]
+    });
+  }
+
+  getUserInput() {}
+
   render() {
     const state = this.state;
 
@@ -132,10 +153,10 @@ export default class App extends Component {
           <Table borderStyle={{ borderWidth: 2, borderColor: "#c8e1ff" }}>
             <Rows data={state.NPKLabel} textStyle={styles.text} />
             <Rows data={state.inputData} textStyle={styles.text} />
+            <Rows data={state.caclulatedValue} textStyle={styles.text} />
             <Rows data={state.nutrientsSuppliedLabel} widthArr={state.widthArr} textStyle={styles.text} />
             <Rows data={state.gradeData} textStyle={styles.text} />
           </Table>
-          <Text> {state.NAcreValue} </Text>
         </Content>
       </Container>
     );
