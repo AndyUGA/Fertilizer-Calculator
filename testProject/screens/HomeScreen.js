@@ -50,7 +50,7 @@ export default class App extends Component {
               defaultValue="60"
               placeholder="Enter N value"
               onChangeText={inputtedValue => {
-                this.changeDefaultValue(inputtedValue);
+                this.updateNValue(inputtedValue);
               }}
             />
           </Item>,
@@ -59,7 +59,7 @@ export default class App extends Component {
               defaultValue="80"
               placeholder="Enter P value"
               onChangeText={inputtedValue => {
-                //this.displayInputtedP(inputtedValue);
+                this.updatePValue(inputtedValue);
               }}
             />
           </Item>,
@@ -68,13 +68,9 @@ export default class App extends Component {
               defaultValue="100"
               placeholder="Enter K value"
               onChangeText={inputtedValue => {
-                //this.displayInputtedK(inputtedValue);
+                this.updateKValue(inputtedValue);
               }}
-              onEndEditing={inputtedValue => {
-                //this.calculateSD();
-                //this.parseValue(this.state.defaultGrade);
-                //this.calculatePerAcre(this.state.defaultAcre);
-              }}
+              onEndEditing={inputtedValue => {}}
             />
           </Item>
         ]
@@ -88,7 +84,7 @@ export default class App extends Component {
             defaultValue="1000"
             placeholder="Enter value per acre"
             onChangeText={inputtedValue => {
-              this.changeDefaultValue(inputtedValue);
+              this.changeAcreValue(inputtedValue);
             }}
           />
         ]
@@ -106,7 +102,10 @@ export default class App extends Component {
       poundsOrOunces: "",
       sfOrAcres: "",
       tempFactor: 0,
-      currentArea: 1000
+      currentArea: 1000,
+      nResult: 0,
+      pResult: 0,
+      kResult: 0
     };
   }
 
@@ -134,10 +133,37 @@ export default class App extends Component {
     });
   }
 
-  changeDefaultValue(inputtedValue) {
+  changeAcreValue(inputtedValue) {
     this.setState({
       currentArea: inputtedValue
     });
+  }
+
+  updateNValue(value) {
+    this.setState(
+      {
+        currentNValue: value
+      },
+      () => this.calcuateAcreValue()
+    );
+  }
+
+  updatePValue(value) {
+    this.setState(
+      {
+        currentPValue: value
+      },
+      () => this.calcuateAcreValue()
+    );
+  }
+
+  updateKValue(value) {
+    this.setState(
+      {
+        currentKValue: value
+      },
+      () => this.calcuateAcreValue()
+    );
   }
 
   calcuateAcreValue() {
@@ -157,15 +183,39 @@ export default class App extends Component {
       factor = "Error";
     }
 
-    this.setState({
-      poundsOrOunces: poundsOrOunces,
-      tempFactor: factor,
-      sfOrAcres: sfOrAcres,
-      caclulatedValue: [[(this.state.currentNValue / factor).toFixed(2), (this.state.currentPValue / factor).toFixed(2), (this.state.currentKValue / factor).toFixed(2)]]
-    });
+    this.setState(
+      {
+        poundsOrOunces: poundsOrOunces,
+        tempFactor: factor,
+        sfOrAcres: sfOrAcres,
+        nResult: (this.state.currentNValue / factor).toFixed(2),
+        pResult: (this.state.currentPValue / factor).toFixed(2),
+        kResult: (this.state.currentKValue / factor).toFixed(2),
+
+        caclulatedValue: [[, (this.state.currentNValue / factor).toFixed(2), (this.state.currentPValue / factor).toFixed(2), (this.state.currentKValue / factor).toFixed(2)]]
+      },
+      () => {
+        this.calculateValues();
+      }
+    );
   }
 
   getUserInput() {}
+
+  calculateValues() {
+    //nsd = Nutrients Surplus or Deficit
+    let nResult = this.state.nResult;
+    let pResult = this.state.pResult;
+    let kResult = this.state.kResult;
+
+    let nsdNValue = nResult - nResult;
+    let nsdPValue = pResult - nResult;
+    let nsdKValue = kResult - nResult;
+
+    this.setState({
+      gradeData2: [[this.state.nResult, this.state.nResult, this.state.nResult, nsdNValue.toFixed(2), nsdPValue.toFixed(2), nsdKValue.toFixed(2)]]
+    });
+  }
 
   render() {
     const state = this.state;
@@ -205,6 +255,7 @@ export default class App extends Component {
           </Table>
           <Text> {state.poundsOrOunces}</Text>
           <Text> {state.sfOrAcres}</Text>
+          <Text> {state.currentNValue}</Text>
         </Content>
       </Container>
     );
