@@ -101,7 +101,7 @@ export default class App extends Component {
       nValue: 0,
       pValue: 0,
       kValue: 0,
-      pounds: "Pounds - Square Feet"
+      defaultUnits: "Pounds - Square Feet"
     };
   }
 
@@ -169,16 +169,16 @@ export default class App extends Component {
               <Picker
                 mode="dropdown"
                 iosIcon={<Icon name="arrow-down" />}
-                selectedValue={state.pounds}
-                placeholder="Select units"
+                selectedValue={state.defaultUnits}
+                placeholder={state.defaultUnits}
                 onValueChange={value => {
-                  this.setState({ pounds: value }, () => {});
+                  this.setState({ defaultUnits: value }, () => {});
                 }}
               >
-                <Picker.Item label="Pounds - Square Feet" value="Pounds-SF" />
-                <Picker.Item label="Pounds - Acre" value="Pounds-A" />
-                <Picker.Item label="Ounces - Square Feet" value="Ounces-SF" />
-                <Picker.Item label="Ounces - Acre" value="Ounces-A" />
+                <Picker.Item label="Pounds - Square Feet" value="Pounds - Square Feet" />
+                <Picker.Item label="Pounds - Acre" value="Pounds - Acre" />
+                <Picker.Item label="Ounces - Square Feet" value="Ounces - Square Feet" />
+                <Picker.Item label="Ounces - Acre" value="Ounces - Acre" />
               </Picker>
             </Form>
             <Rows data={state.foo} textStyle={styles.text} />
