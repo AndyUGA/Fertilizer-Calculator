@@ -101,7 +101,7 @@ export default class App extends Component {
       nValue: 0,
       pValue: 0,
       kValue: 0,
-      pounds: "pounds"
+      pounds: "Pounds - Square Feet"
     };
   }
 
@@ -168,9 +168,9 @@ export default class App extends Component {
             <Form>
               <Picker
                 mode="dropdown"
-                iosHeader="Select Grade"
                 iosIcon={<Icon name="arrow-down" />}
-                selectedValue={this.state.pounds}
+                selectedValue={state.pounds}
+                placeholder="Select units"
                 onValueChange={value => {
                   this.setState({ pounds: value }, () => {});
                 }}
