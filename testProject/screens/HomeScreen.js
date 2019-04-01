@@ -20,7 +20,7 @@ export default class App extends Component {
     this.state = {
       checkBoxOptions: (
         <ListItem>
-          <CheckBox onPress={() => this.setState(this.sortArray(), this.calcuateAcreValue(1000))} />
+          <CheckBox onPress={() => this.setState(this.sortArray(), this.calcuateAcreValue())} />
           <Body>
             <Text> 10 - 10 - 10</Text>
           </Body>
@@ -82,10 +82,10 @@ export default class App extends Component {
       currentNValue: 60,
       currentPValue: 80,
       currentKValue: 100,
-      foo: [
+      area: [
         [
           <TextInput
-            defaultValue="0"
+            defaultValue="1000"
             placeholder="Enter value per acre"
             onChangeText={inputtedValue => {
               this.changeDefaultValue(inputtedValue);
@@ -96,12 +96,17 @@ export default class App extends Component {
       caclulatedValue: [[0, 0, 0]],
       nutrientsSuppliedLabel: [["Nutrients supplied", "Nutrients surplus or deficit"]],
       gradeData: [["N", "P", "K", "N", "P", "K", "Score"], [1.38, 1.38, 1.38, 0.0, 0.46, 0.92, 87], [1.84, 1.84, 1.84, 0.46, 0.0, 0.46, 93]],
+      gradeData2: [["1", "2", "3"]],
       widthArr: [160, 160],
       basicArray: [["A", 95, 3], ["B", 100, 1], ["C", 75, 2]],
       nValue: 0,
       pValue: 0,
       kValue: 0,
-      defaultUnits: "Pounds - Square Feet"
+      defaultUnits: "Pounds-Square Feet",
+      poundsOrOunces: "",
+      sfOrAcres: "",
+      tempFactor: 0,
+      currentArea: 1000
     };
   }
 
@@ -131,21 +136,32 @@ export default class App extends Component {
 
   changeDefaultValue(inputtedValue) {
     this.setState({
-      defaultNValue: inputtedValue
+      currentArea: inputtedValue
     });
   }
 
-  calcuateAcreValue(value) {
-    let num1 = 43560 / +value;
-    let nValue = (this.state.currentNValue / num1).toFixed(2);
-    let pValue = (this.state.currentPValue / num1).toFixed(2);
-    let kValue = (this.state.currentKValue / num1).toFixed(2);
+  calcuateAcreValue() {
+    let selectedUnits = this.state.defaultUnits.split("-");
+    let poundsOrOunces = selectedUnits[0];
+    let sfOrAcres = selectedUnits[1];
+    let factor = 0;
+    if (poundsOrOunces == "Pounds" && sfOrAcres == "Square Feet") {
+      factor = 43560 / +this.state.currentArea;
+    } else if (poundsOrOunces == "Pounds" && sfOrAcres == "Acre") {
+      factor = 1 / +this.state.currentArea;
+    } else if (poundsOrOunces == "Ounces" && sfOrAcres == "Square Feet") {
+      factor = (0.0625 * 43560) / this.state.currentArea;
+    } else if (poundsOrOunces == "Ounces" && sfOrAcres == "Acre") {
+      factor = 0.0625 / this.state.currentArea;
+    } else {
+      factor = "Error";
+    }
 
     this.setState({
-      nValue: nValue,
-      pValue: pValue,
-      kValue: kValue,
-      caclulatedValue: [[nValue, pValue, kValue]]
+      poundsOrOunces: poundsOrOunces,
+      tempFactor: factor,
+      sfOrAcres: sfOrAcres,
+      caclulatedValue: [[(this.state.currentNValue / factor).toFixed(2), (this.state.currentPValue / factor).toFixed(2), (this.state.currentKValue / factor).toFixed(2)]]
     });
   }
 
@@ -175,17 +191,20 @@ export default class App extends Component {
                   this.setState({ defaultUnits: value }, () => {});
                 }}
               >
-                <Picker.Item label="Pounds - Square Feet" value="Pounds - Square Feet" />
-                <Picker.Item label="Pounds - Acre" value="Pounds - Acre" />
-                <Picker.Item label="Ounces - Square Feet" value="Ounces - Square Feet" />
-                <Picker.Item label="Ounces - Acre" value="Ounces - Acre" />
+                <Picker.Item label="Pounds - Square Feet" value="Pounds-Square Feet" />
+                <Picker.Item label="Pounds - Acre" value="Pounds-Acre" />
+                <Picker.Item label="Ounces - Square Feet" value="Ounces-Square Feet" />
+                <Picker.Item label="Ounces - Acre" value="Ounces-Acre" />
               </Picker>
             </Form>
-            <Rows data={state.foo} textStyle={styles.text} />
+            <Rows data={state.area} textStyle={styles.text} />
             <Rows data={state.caclulatedValue} textStyle={styles.text} />
             <Rows data={state.nutrientsSuppliedLabel} widthArr={state.widthArr} textStyle={styles.text} />
             <Rows data={state.gradeData} textStyle={styles.text} />
+            <Rows data={state.gradeData2} textStyle={styles.text} />
           </Table>
+          <Text> {state.poundsOrOunces}</Text>
+          <Text> {state.sfOrAcres}</Text>
         </Content>
       </Container>
     );
