@@ -20,7 +20,7 @@ export default class App extends Component {
     this.state = {
       checkBoxOptions: (
         <ListItem>
-          <CheckBox onPress={() => this.setState(this.sortArray(), this.parseSelectedGrade("10-10-10"))} />
+          <CheckBox onPress={() => this.setState(this.sortArray(), this.parseSelectedGrade("10-10-10"), this.calculateValues())} />
           <Body>
             <Text> 10 - 10 - 10</Text>
           </Body>
@@ -95,7 +95,7 @@ export default class App extends Component {
       gradeData: [["N", "P", "K", "N", "P", "K", "Score"]],
       gradeData2: [["0", "0", "0", "0", "0", "0"]],
       widthArr: [160, 160],
-      defaultUnits: "Pounds-Square Feet",
+      defaultUnits: "Select Grade",
       poundsOrOunces: "",
       sfOrAcres: "",
       tempFactor: 0,
@@ -145,40 +145,45 @@ export default class App extends Component {
     });
   }
 
+  //Update value of acre amount
   updateAcreValue(inputtedValue) {
     this.setState({
       currentArea: inputtedValue
     });
   }
 
+  //Update value of N
   updateNValue(value) {
     this.setState(
       {
         currentNValue: value
       },
-      () => this.calcuateAcreValue()
+      () => this.calculateAcreValue()
     );
   }
 
+  //Update value of P
   updatePValue(value) {
     this.setState(
       {
         currentPValue: value
       },
-      () => this.calcuateAcreValue()
+      () => this.calculateAcreValue()
     );
   }
 
+  //Update value of K
   updateKValue(value) {
     this.setState(
       {
         currentKValue: value
       },
-      () => this.calcuateAcreValue()
+      () => this.calculateAcreValue()
     );
   }
 
-  calcuateAcreValue() {
+  //Calculate values relating to pounds per square feet
+  calculateAcreValue() {
     let selectedUnits = this.state.defaultUnits.split("-");
     let poundsOrOunces = selectedUnits[0];
     let sfOrAcres = selectedUnits[1];
@@ -195,23 +200,19 @@ export default class App extends Component {
       factor = "Error";
     }
 
-    this.setState(
-      {
-        poundsOrOunces: poundsOrOunces,
-        tempFactor: factor,
-        sfOrAcres: sfOrAcres,
-        nResult: (this.state.currentNValue / factor).toFixed(2),
-        pResult: (this.state.currentPValue / factor).toFixed(2),
-        kResult: (this.state.currentKValue / factor).toFixed(2),
+    this.setState({
+      poundsOrOunces: poundsOrOunces,
+      tempFactor: factor,
+      sfOrAcres: sfOrAcres,
+      nResult: (this.state.currentNValue / factor).toFixed(2),
+      pResult: (this.state.currentPValue / factor).toFixed(2),
+      kResult: (this.state.currentKValue / factor).toFixed(2),
 
-        caclulatedValue: [[, (this.state.currentNValue / factor).toFixed(2), (this.state.currentPValue / factor).toFixed(2), (this.state.currentKValue / factor).toFixed(2)]]
-      },
-      () => {
-        this.calculateValues();
-      }
-    );
+      caclulatedValue: [[, (this.state.currentNValue / factor).toFixed(2), (this.state.currentPValue / factor).toFixed(2), (this.state.currentKValue / factor).toFixed(2)]]
+    });
   }
 
+  //Calculating values relating to each row of data
   calculateValues() {
     //nsd = Nutrients Surplus or Deficit
     let nResult = this.state.nResult;
@@ -310,7 +311,7 @@ export default class App extends Component {
                 placeholder={state.defaultUnits}
                 onValueChange={value => {
                   this.setState({ defaultUnits: value }, () => {
-                    this.calcuateAcreValue();
+                    this.calculateAcreValue();
                   });
                 }}
               >
