@@ -91,8 +91,9 @@ export default class App extends Component {
       ],
       caclulatedValue: [[0, 0, 0]],
       nutrientsSuppliedLabel: [["Nutrients supplied", "Nutrients surplus or deficit"]],
-      gradeData: [["N", "P", "K", "N", "P", "K", "Score"], [1.38, 1.38, 1.38, 0.0, 0.46, 0.92, 87], [1.84, 1.84, 1.84, 0.46, 0.0, 0.46, 93]],
-      gradeData2: [["1", "2", "3"]],
+      //gradeData: [["N", "P", "K", "N", "P", "K", "Score"], [1.38, 1.38, 1.38, 0.0, 0.46, 0.92, 87], [1.84, 1.84, 1.84, 0.46, 0.0, 0.46, 93]],
+      gradeData: [["N", "P", "K", "N", "P", "K", "Score"]],
+      gradeData2: [["0", "0", "0", "0", "0", "0"]],
       widthArr: [160, 160],
       basicArray: [["A", 95, 3], ["B", 100, 1], ["C", 75, 2]],
       nValue: 0,
@@ -105,7 +106,10 @@ export default class App extends Component {
       currentArea: 1000,
       nResult: 0,
       pResult: 0,
-      kResult: 0
+      kResult: 0,
+      foo: 0,
+      testString: "Hello",
+      testString2: "World"
     };
   }
 
@@ -124,12 +128,6 @@ export default class App extends Component {
     });
     this.setState({
       gradeData: tempArray
-    });
-  }
-
-  switch() {
-    this.setState({
-      gradeData: this.state.testData
     });
   }
 
@@ -200,17 +198,17 @@ export default class App extends Component {
     );
   }
 
-  getUserInput() {}
-
   calculateValues() {
     //nsd = Nutrients Surplus or Deficit
     let nResult = this.state.nResult;
     let pResult = this.state.pResult;
     let kResult = this.state.kResult;
 
+    this.state.foo = ((nResult / 10) * 100).toFixed(2);
+
     let nsdNValue = nResult - nResult;
-    let nsdPValue = pResult - nResult;
-    let nsdKValue = kResult - nResult;
+    let nsdPValue = nResult - pResult;
+    let nsdKValue = nResult - kResult;
 
     this.setState({
       gradeData2: [[this.state.nResult, this.state.nResult, this.state.nResult, nsdNValue.toFixed(2), nsdPValue.toFixed(2), nsdKValue.toFixed(2)]]
@@ -238,7 +236,9 @@ export default class App extends Component {
                 selectedValue={state.defaultUnits}
                 placeholder={state.defaultUnits}
                 onValueChange={value => {
-                  this.setState({ defaultUnits: value }, () => {});
+                  this.setState({ defaultUnits: value }, () => {
+                    this.calcuateAcreValue();
+                  });
                 }}
               >
                 <Picker.Item label="Pounds - Square Feet" value="Pounds-Square Feet" />
@@ -255,7 +255,11 @@ export default class App extends Component {
           </Table>
           <Text> {state.poundsOrOunces}</Text>
           <Text> {state.sfOrAcres}</Text>
-          <Text> {state.currentNValue}</Text>
+          <Text> {state.foo}</Text>
+          <Text>
+            {" "}
+            This is {state.testString} and {state.testString2}
+          </Text>
         </Content>
       </Container>
     );
