@@ -20,11 +20,11 @@ export default class App extends Component {
     this.state = {
       checkBoxOptions: (
         <ListItem>
-          <CheckBox onPress={() => this.setState(this.sortArray(), this.calcuateAcreValue())} />
+          <CheckBox onPress={() => this.setState(this.sortArray(), this.parseSelectedGrade("10-10-10"))} />
           <Body>
             <Text> 10 - 10 - 10</Text>
           </Body>
-          <CheckBox onPress={() => this.setState(this.sortArray())} />
+          <CheckBox onPress={() => this.setState(this.sortArray(), this.parseSelectedGrade("5-5-5"))} />
           <Body>
             <Text> 5 - 5 - 5</Text>
           </Body>
@@ -32,11 +32,11 @@ export default class App extends Component {
       ),
       checkBoxOptions2: (
         <ListItem>
-          <CheckBox onPress={() => this.setState(this.sortArray())} />
+          <CheckBox onPress={() => this.setState(this.sortArray(), this.parseSelectedGrade("0-10-10"))} />
           <Body>
             <Text> 0 - 10 - 10</Text>
           </Body>
-          <CheckBox onPress={() => this.setState(this.sortArray())} />
+          <CheckBox onPress={() => this.setState(this.sortArray(), this.parseSelectedGrade("15-0-15"))} />
           <Body>
             <Text> 15 - 0 - 15</Text>
           </Body>
@@ -84,7 +84,7 @@ export default class App extends Component {
             defaultValue="1000"
             placeholder="Enter value per acre"
             onChangeText={inputtedValue => {
-              this.changeAcreValue(inputtedValue);
+              this.updateAcreValue(inputtedValue);
             }}
           />
         ]
@@ -95,10 +95,6 @@ export default class App extends Component {
       gradeData: [["N", "P", "K", "N", "P", "K", "Score"]],
       gradeData2: [["0", "0", "0", "0", "0", "0"]],
       widthArr: [160, 160],
-      basicArray: [["A", 95, 3], ["B", 100, 1], ["C", 75, 2]],
-      nValue: 0,
-      pValue: 0,
-      kValue: 0,
       defaultUnits: "Pounds-Square Feet",
       poundsOrOunces: "",
       sfOrAcres: "",
@@ -109,7 +105,25 @@ export default class App extends Component {
       kResult: 0,
       foo: 0,
       testString: "Hello",
-      testString2: "World"
+      testString2: "World",
+      selectedGrade: [],
+      matchN: 0,
+      matchP: 0,
+      matchK: 0,
+      suppliedNum1: 0,
+      suppliedNum2: 0,
+      suppliedNum3: 0,
+
+      suppliedNum4: 0,
+      suppliedNum5: 0,
+      suppliedNum6: 0,
+
+      suppliedNum7: 0,
+      suppliedNum8: 0,
+      suppliedNum9: 0,
+      score1: 0,
+      score2: 0,
+      score3: 0
     };
   }
 
@@ -131,7 +145,7 @@ export default class App extends Component {
     });
   }
 
-  changeAcreValue(inputtedValue) {
+  updateAcreValue(inputtedValue) {
     this.setState({
       currentArea: inputtedValue
     });
@@ -215,6 +229,65 @@ export default class App extends Component {
     });
   }
 
+  parseSelectedGrade(grade) {
+    /*
+      Split the selected grades
+      Ex: 10-10-10 will become
+      gradeOne = 10
+      gradeTwo = 10
+      gradeThree = 10
+    */
+    this.state.selectedGrade = grade.split("-");
+
+    let gradeOne = +this.state.selectedGrade[0];
+    let gradeTwo = +this.state.selectedGrade[1];
+    let gradeThree = +this.state.selectedGrade[2];
+
+    let matchN = gradeOne ? Math.ceil((this.state.currentNValue / gradeOne) * 100) : 0;
+    let matchP = gradeTwo ? Math.ceil((this.state.currentPValue / gradeTwo) * 100) : 0;
+    let matchK = gradeThree ? Math.ceil((this.state.currentKValue / gradeThree) * 100) : 0;
+
+    this.setState(
+      {
+        matchN: matchN,
+        matchP: matchP,
+        matchK: matchK
+      },
+      () => {
+        this.calculateScore();
+      }
+    );
+  }
+
+  calculateScore() {
+    this.setState(
+      {
+        suppliedNum1: supplied(+this.state.matchN, +this.state.selectedGrade[0]),
+        suppliedNum2: supplied(+this.state.matchN, +this.state.selectedGrade[1]),
+        suppliedNum3: supplied(+this.state.matchN, +this.state.selectedGrade[2]),
+
+        suppliedNum4: supplied(+this.state.matchP, +this.state.selectedGrade[0]),
+        suppliedNum5: supplied(+this.state.matchP, +this.state.selectedGrade[1]),
+        suppliedNum6: supplied(+this.state.matchP, +this.state.selectedGrade[2]),
+
+        suppliedNum7: supplied(+this.state.matchK, +this.state.selectedGrade[0]),
+        suppliedNum8: supplied(+this.state.matchK, +this.state.selectedGrade[1]),
+        suppliedNum9: supplied(+this.state.matchK, +this.state.selectedGrade[2])
+      },
+      () => {
+        this.calculateFinalScore();
+      }
+    );
+  }
+
+  calculateFinalScore() {
+    this.setState({
+      score1: calculateIndividualScore(this.state.suppliedNum1, this.state.suppliedNum2, this.state.suppliedNum3, +this.state.currentNValue, +this.state.currentPValue, +this.state.currentKValue),
+      score2: calculateIndividualScore(this.state.suppliedNum4, this.state.suppliedNum5, this.state.suppliedNum6, +this.state.currentNValue, +this.state.currentPValue, +this.state.currentKValue),
+      score3: calculateIndividualScore(this.state.suppliedNum7, this.state.suppliedNum8, this.state.suppliedNum9, +this.state.currentNValue, +this.state.currentPValue, +this.state.currentKValue)
+    });
+  }
+
   render() {
     const state = this.state;
 
@@ -253,13 +326,15 @@ export default class App extends Component {
             <Rows data={state.gradeData} textStyle={styles.text} />
             <Rows data={state.gradeData2} textStyle={styles.text} />
           </Table>
-          <Text> {state.poundsOrOunces}</Text>
-          <Text> {state.sfOrAcres}</Text>
           <Text> {state.foo}</Text>
           <Text>
             {" "}
             This is {state.testString} and {state.testString2}
           </Text>
+          <Text> {state.selectedGrade[0]}</Text>
+          <Text> {state.score1}</Text>
+          <Text> {state.score2}</Text>
+          <Text> {state.score3}</Text>
         </Content>
       </Container>
     );
