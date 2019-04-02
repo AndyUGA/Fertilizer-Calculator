@@ -20,7 +20,7 @@ export default class App extends Component {
     this.state = {
       checkBoxOptions: (
         <ListItem>
-          <CheckBox onPress={() => this.setState(this.sortArray(), this.parseSelectedGrade("10-10-10"), this.calculateValues())} />
+          <CheckBox onPress={() => this.setState(this.sortArray(), this.parseSelectedGrade("10-10-10"))} />
           <Body>
             <Text> 10 - 10 - 10</Text>
           </Body>
@@ -103,10 +103,13 @@ export default class App extends Component {
       nResult: 0,
       pResult: 0,
       kResult: 0,
-      foo: 0,
+      nArea: 0,
+      pArea: 0,
+      kArea: 0,
       testString: "Hello",
       testString2: "World",
       selectedGrade: [],
+      fullGrade: "",
       matchN: 0,
       matchP: 0,
       matchK: 0,
@@ -204,32 +207,15 @@ export default class App extends Component {
       poundsOrOunces: poundsOrOunces,
       tempFactor: factor,
       sfOrAcres: sfOrAcres,
-      nResult: (this.state.currentNValue / factor).toFixed(2),
-      pResult: (this.state.currentPValue / factor).toFixed(2),
-      kResult: (this.state.currentKValue / factor).toFixed(2),
+      nResult: this.state.currentNValue / factor,
+      pResult: this.state.currentPValue / factor,
+      kResult: this.state.currentKValue / factor,
 
       caclulatedValue: [[, (this.state.currentNValue / factor).toFixed(2), (this.state.currentPValue / factor).toFixed(2), (this.state.currentKValue / factor).toFixed(2)]]
     });
   }
 
-  //Calculating values relating to each row of data
-  calculateValues() {
-    //nsd = Nutrients Surplus or Deficit
-    let nResult = this.state.nResult;
-    let pResult = this.state.pResult;
-    let kResult = this.state.kResult;
-
-    this.state.foo = ((nResult / 10) * 100).toFixed(2);
-
-    let nsdNValue = nResult - nResult;
-    let nsdPValue = nResult - pResult;
-    let nsdKValue = nResult - kResult;
-
-    this.setState({
-      gradeData2: [[this.state.nResult, this.state.nResult, this.state.nResult, nsdNValue.toFixed(2), nsdPValue.toFixed(2), nsdKValue.toFixed(2)]]
-    });
-  }
-
+  //Gets values from selected grade
   parseSelectedGrade(grade) {
     /*
       Split the selected grades
@@ -250,6 +236,7 @@ export default class App extends Component {
 
     this.setState(
       {
+        fullGrade: grade,
         matchN: matchN,
         matchP: matchP,
         matchK: matchK
@@ -260,6 +247,7 @@ export default class App extends Component {
     );
   }
 
+  //Calculate values to calculate final score
   calculateScore() {
     this.setState(
       {
@@ -281,11 +269,37 @@ export default class App extends Component {
     );
   }
 
+  //Calculates final scores based on parameters
   calculateFinalScore() {
+    this.setState(
+      {
+        score1: calculateIndividualScore(this.state.suppliedNum1, this.state.suppliedNum2, this.state.suppliedNum3, +this.state.currentNValue, +this.state.currentPValue, +this.state.currentKValue),
+        score2: calculateIndividualScore(this.state.suppliedNum4, this.state.suppliedNum5, this.state.suppliedNum6, +this.state.currentNValue, +this.state.currentPValue, +this.state.currentKValue),
+        score3: calculateIndividualScore(this.state.suppliedNum7, this.state.suppliedNum8, this.state.suppliedNum9, +this.state.currentNValue, +this.state.currentPValue, +this.state.currentKValue)
+      },
+      () => {
+        this.calculateValues();
+      }
+    );
+  }
+
+  //Calculating values relating to each row of data
+  calculateValues() {
+    //nsd = Nutrients Surplus or Deficit
+    let nResult = this.state.nResult;
+    let pResult = this.state.pResult;
+    let kResult = this.state.kResult;
+
+    this.state.nArea = ((nResult / this.state.selectedGrade[0]) * 100).toFixed(2);
+    this.state.pArea = ((pResult / this.state.selectedGrade[1]) * 100).toFixed(2);
+    this.state.kArea = ((kResult / this.state.selectedGrade[2]) * 100).toFixed(2);
+
+    let nsdNValue = nResult - nResult;
+    let nsdPValue = nResult - pResult;
+    let nsdKValue = nResult - kResult;
+
     this.setState({
-      score1: calculateIndividualScore(this.state.suppliedNum1, this.state.suppliedNum2, this.state.suppliedNum3, +this.state.currentNValue, +this.state.currentPValue, +this.state.currentKValue),
-      score2: calculateIndividualScore(this.state.suppliedNum4, this.state.suppliedNum5, this.state.suppliedNum6, +this.state.currentNValue, +this.state.currentPValue, +this.state.currentKValue),
-      score3: calculateIndividualScore(this.state.suppliedNum7, this.state.suppliedNum8, this.state.suppliedNum9, +this.state.currentNValue, +this.state.currentPValue, +this.state.currentKValue)
+      gradeData2: [[this.state.nResult, this.state.nResult, this.state.nResult, nsdNValue.toFixed(2), nsdPValue.toFixed(2), nsdKValue.toFixed(2), this.state.score1]]
     });
   }
 
@@ -327,12 +341,20 @@ export default class App extends Component {
             <Rows data={state.gradeData} textStyle={styles.text} />
             <Rows data={state.gradeData2} textStyle={styles.text} />
           </Table>
-          <Text> {state.foo}</Text>
+          <Text> {state.nArea}</Text>
           <Text>
             {" "}
-            This is {state.testString} and {state.testString2}
+            Apply {state.nArea} {state.poundsOrOunces} of {state.fullGrade} per {state.currentArea} {state.sfOrAcres}
           </Text>
-          <Text> {state.selectedGrade[0]}</Text>
+          <Text>
+            {" "}
+            Apply {state.pArea} {state.poundsOrOunces} of {state.fullGrade} per {state.currentArea} {state.sfOrAcres}
+          </Text>
+          <Text>
+            {" "}
+            Apply {state.kArea} {state.poundsOrOunces} of {state.fullGrade} per {state.currentArea} {state.sfOrAcres}
+          </Text>
+
           <Text> {state.score1}</Text>
           <Text> {state.score2}</Text>
           <Text> {state.score3}</Text>
