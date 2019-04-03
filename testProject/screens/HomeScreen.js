@@ -291,7 +291,6 @@ export default class App extends Component {
 
   //Calculating values relating to each row of data
   calculateValues() {
-    //nsd = Nutrients Surplus or Deficit
     let nResult = this.state.nResult;
     let pResult = this.state.pResult;
     let kResult = this.state.kResult;
@@ -300,20 +299,29 @@ export default class App extends Component {
     this.state.pArea = ((pResult / this.state.selectedGrade[1]) * 100).toFixed(2);
     this.state.kArea = ((kResult / this.state.selectedGrade[2]) * 100).toFixed(2);
 
-    let nsdNValue = nResult - nResult;
-    let nsdPValue = nResult - pResult;
-    let nsdKValue = nResult - kResult;
+    //nsd = Nutrients Surplus or Deficit
+    let NSD1 = nResult - nResult;
+    let PSD1 = nResult - pResult;
+    let KSD1 = nResult - kResult;
+
+    let NSD2 = pResult - nResult;
+    let PSD2 = pResult - pResult;
+    let KSD2 = pResult - kResult;
+
+    let NSD3 = kResult - nResult;
+    let PSD3 = kResult - pResult;
+    let KSD3 = kResult - kResult;
 
     this.setState(
       {
         gradeData2: [
           ...this.state.gradeData2,
           ["Apply " + this.state.nArea + " " + this.state.poundsOrOunces + " of " + this.state.fullGrade + " per " + this.state.currentArea + " " + this.state.sfOrAcres],
-          [this.state.nResult.toFixed(2), this.state.nResult.toFixed(2), this.state.nResult.toFixed(2), nsdNValue.toFixed(2), nsdPValue.toFixed(2), nsdKValue.toFixed(2), this.state.score1],
+          [this.state.nResult.toFixed(2), this.state.nResult.toFixed(2), this.state.nResult.toFixed(2), NSD1.toFixed(2), PSD1.toFixed(2), KSD1.toFixed(2), this.state.score1],
           ["Apply " + this.state.pArea + " " + this.state.poundsOrOunces + " of " + this.state.fullGrade + " per " + this.state.currentArea + " " + this.state.sfOrAcres],
-          [this.state.pResult.toFixed(2), this.state.pResult.toFixed(2), this.state.pResult.toFixed(2), nsdNValue.toFixed(2), nsdPValue.toFixed(2), nsdKValue.toFixed(2), this.state.score2],
+          [this.state.pResult.toFixed(2), this.state.pResult.toFixed(2), this.state.pResult.toFixed(2), NSD2.toFixed(2), PSD2.toFixed(2), KSD2.toFixed(2), this.state.score2],
           ["Apply " + this.state.kArea + " " + this.state.poundsOrOunces + " of " + this.state.fullGrade + " per " + this.state.currentArea + " " + this.state.sfOrAcres],
-          [this.state.kResult.toFixed(2), this.state.kResult.toFixed(2), this.state.kResult.toFixed(2), nsdNValue.toFixed(2), nsdPValue.toFixed(2), nsdKValue.toFixed(2), this.state.score3 - 1]
+          [this.state.kResult.toFixed(2), this.state.kResult.toFixed(2), this.state.kResult.toFixed(2), NSD3.toFixed(2), PSD3.toFixed(2), KSD3.toFixed(2), this.state.score3 - 1]
         ]
       },
       () => {
