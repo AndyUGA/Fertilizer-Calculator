@@ -51,6 +51,7 @@ export default class App extends Component {
               placeholder="Enter N value"
               onChangeText={inputtedValue => {
                 this.updateNValue(inputtedValue);
+                this.parseSelectedGrade("10-10-10");
               }}
             />
           </Item>,
@@ -93,7 +94,7 @@ export default class App extends Component {
       nutrientsSuppliedLabel: [["Nutrients supplied", "Nutrients surplus or deficit"]],
       //gradeData: [["N", "P", "K", "N", "P", "K", "Score"], [1.38, 1.38, 1.38, 0.0, 0.46, 0.92, 87], [1.84, 1.84, 1.84, 0.46, 0.0, 0.46, 93]],
       gradeData: [["N", "P", "K", "N", "P", "K", "Score"]],
-      gradeData2: [["0", "0", "0", "0", "0", "0"]],
+      gradeData2: [[]],
       widthArr: [160, 160],
       defaultUnits: "Select Grade",
       poundsOrOunces: "",
@@ -126,7 +127,9 @@ export default class App extends Component {
       suppliedNum9: 0,
       score1: 0,
       score2: 0,
-      score3: 0
+      score3: 0,
+
+      valueArray: [[]]
     };
   }
 
@@ -140,11 +143,11 @@ export default class App extends Component {
   }
 
   sortArray() {
-    let tempArray = this.state.gradeData.sort(function(a, b) {
+    let tempArray = this.state.gradeData2.sort(function(a, b) {
       return b[6] - a[6];
     });
     this.setState({
-      gradeData: tempArray
+      gradeData2: tempArray
     });
   }
 
@@ -161,7 +164,9 @@ export default class App extends Component {
       {
         currentNValue: value
       },
-      () => this.calculateAcreValue()
+      () => {
+        this.parseSelectedGrade("10-10-10");
+      }
     );
   }
 
@@ -242,6 +247,7 @@ export default class App extends Component {
         matchK: matchK
       },
       () => {
+        this.calculateAcreValue();
         this.calculateScore();
       }
     );
@@ -298,8 +304,28 @@ export default class App extends Component {
     let nsdPValue = nResult - pResult;
     let nsdKValue = nResult - kResult;
 
+    this.setState(
+      {
+        gradeData2: [
+          ...this.state.gradeData2,
+          ["Apply " + this.state.nArea + " " + this.state.poundsOrOunces + " of " + this.state.fullGrade + " per " + this.state.currentArea + " " + this.state.sfOrAcres],
+          [this.state.nResult.toFixed(2), this.state.nResult.toFixed(2), this.state.nResult.toFixed(2), nsdNValue.toFixed(2), nsdPValue.toFixed(2), nsdKValue.toFixed(2), this.state.score1],
+          ["Apply " + this.state.pArea + " " + this.state.poundsOrOunces + " of " + this.state.fullGrade + " per " + this.state.currentArea + " " + this.state.sfOrAcres],
+          [this.state.pResult.toFixed(2), this.state.pResult.toFixed(2), this.state.pResult.toFixed(2), nsdNValue.toFixed(2), nsdPValue.toFixed(2), nsdKValue.toFixed(2), this.state.score2],
+          ["Apply " + this.state.kArea + " " + this.state.poundsOrOunces + " of " + this.state.fullGrade + " per " + this.state.currentArea + " " + this.state.sfOrAcres],
+          [this.state.kResult.toFixed(2), this.state.kResult.toFixed(2), this.state.kResult.toFixed(2), nsdNValue.toFixed(2), nsdPValue.toFixed(2), nsdKValue.toFixed(2), this.state.score3 - 1]
+        ]
+      },
+      () => {
+        this.storeValues();
+      }
+    );
+  }
+
+  storeValues() {
     this.setState({
-      gradeData2: [[this.state.nResult, this.state.nResult, this.state.nResult, nsdNValue.toFixed(2), nsdPValue.toFixed(2), nsdKValue.toFixed(2), this.state.score1]]
+      //valueArray: [[this.state.nResult.toFixed(2), this.state.nResult.toFixed(2), this.state.nResult.toFixed(2), 0, 0.46, 0.92, this.state.score1]]
+      //gradeData2: [[this.state.valueArray]]
     });
   }
 
@@ -313,7 +339,6 @@ export default class App extends Component {
         <Content>
           {state.checkBoxOptions}
           {state.checkBoxOptions2}
-
           <Table borderStyle={{ borderWidth: 2, borderColor: "#c8e1ff" }}>
             <Rows data={state.NPKLabel} textStyle={styles.text} />
             <Rows data={state.inputData} textStyle={styles.text} />
@@ -338,26 +363,10 @@ export default class App extends Component {
             <Rows data={state.area} textStyle={styles.text} />
             <Rows data={state.caclulatedValue} textStyle={styles.text} />
             <Rows data={state.nutrientsSuppliedLabel} widthArr={state.widthArr} textStyle={styles.text} />
-            <Rows data={state.gradeData} textStyle={styles.text} />
             <Rows data={state.gradeData2} textStyle={styles.text} />
           </Table>
-          <Text> {state.nArea}</Text>
-          <Text>
-            {" "}
-            Apply {state.nArea} {state.poundsOrOunces} of {state.fullGrade} per {state.currentArea} {state.sfOrAcres}
-          </Text>
-          <Text>
-            {" "}
-            Apply {state.pArea} {state.poundsOrOunces} of {state.fullGrade} per {state.currentArea} {state.sfOrAcres}
-          </Text>
-          <Text>
-            {" "}
-            Apply {state.kArea} {state.poundsOrOunces} of {state.fullGrade} per {state.currentArea} {state.sfOrAcres}
-          </Text>
 
-          <Text> {state.score1}</Text>
-          <Text> {state.score2}</Text>
-          <Text> {state.score3}</Text>
+          <Text> {state.valueArray[0]} </Text>
         </Content>
       </Container>
     );
