@@ -1,6 +1,6 @@
 # Fertilizer Calculator  
 <img src="https://cdn-images-1.medium.com/max/1000/1*GkR93AAlILkmE_3QQf88Ug.png" width="500" height="282">
-<img src="https://github.com/AndyUGA/FertilizerCalculator/blob/master/PrototypeDesign/images/Preview.png" width="379" height="667">
+<img src="https://github.com/AndyUGA/FertilizerCalculator2/blob/master/testProject/Images/Simulator%20Screen%20Shot%20-%20iPhone%206s%20-%202019-04-04%20at%2011.56.39.png" width="379" height="667">
 
 
 
