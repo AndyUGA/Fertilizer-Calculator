@@ -51,6 +51,8 @@ export default class App extends Component {
               placeholder="Enter N value"
               onChangeText={inputtedValue => {
                 this.updateNValue(inputtedValue);
+              }}
+              onEndEditing={value => {
                 this.parseSelectedGrade("10-10-10");
               }}
             />
