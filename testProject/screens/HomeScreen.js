@@ -16,32 +16,9 @@ export default class App extends Component {
   constructor(props) {
     super(props);
     let allowUserInput = false;
-    let isChecked = false;
+
     this.state = {
-      checkBoxOptions: (
-        <ListItem>
-          <CheckBox checked={isChecked} onPress={() => this.setState(this.sortArray(), this.parseSelectedGrade("10-10-10"))} />
-          <Body>
-            <Text> 10 - 10 - 10</Text>
-          </Body>
-          <CheckBox onPress={() => this.setState(this.sortArray(), this.parseSelectedGrade("5-5-5"))} />
-          <Body>
-            <Text> 5 - 5 - 5</Text>
-          </Body>
-        </ListItem>
-      ),
-      checkBoxOptions2: (
-        <ListItem>
-          <CheckBox onPress={() => this.setState(this.sortArray(), this.parseSelectedGrade("0-10-10"))} />
-          <Body>
-            <Text> 0 - 10 - 10</Text>
-          </Body>
-          <CheckBox onPress={() => this.setState(this.sortArray(), this.parseSelectedGrade("15-0-15"))} />
-          <Body>
-            <Text> 15 - 0 - 15</Text>
-          </Body>
-        </ListItem>
-      ),
+      isChecked: false,
       NPKLabel: [["N", "P", "K"]],
       inputData: [
         [
@@ -128,7 +105,7 @@ export default class App extends Component {
       score2: 0,
       score3: 0,
 
-      valueArray: [[]]
+      valueArray: [["A", 10], ["B", 5], ["C", 8]]
     };
   }
 
@@ -145,8 +122,13 @@ export default class App extends Component {
     let tempArray = this.state.gradeData2.sort(function(a, b) {
       return b[6] - a[6];
     });
+
+    let fooArray = this.state.valueArray.sort(function(a, b) {
+      return a[1] - b[1];
+    });
     this.setState({
-      gradeData2: tempArray
+      gradeData2: tempArray,
+      valueArray: fooArray
     });
   }
 
@@ -242,17 +224,27 @@ export default class App extends Component {
     let matchP = gradeTwo ? Math.ceil((this.state.currentPValue / gradeTwo) * 100) : 0;
     let matchK = gradeThree ? Math.ceil((this.state.currentKValue / gradeThree) * 100) : 0;
 
+    /*
+    if (this.state.isChecked == true) {
+      this.setState({
+        gradeData2: [[], [], [], [], [], []]
+      });
+    }
+    */
+
     this.setState(
       {
-        isChecked: true,
+        //isChecked: !this.state.isChecked,
         fullGrade: grade,
         matchN: matchN,
         matchP: matchP,
         matchK: matchK
       },
       () => {
+        //if (this.state.isChecked == true) {
         this.calculateAcreValue();
         this.calculateScore();
+        //}
       }
     );
   }
@@ -316,20 +308,22 @@ export default class App extends Component {
     let PSD3 = kResult - pResult;
     let KSD3 = kResult - kResult;
 
+    let nLabel = "Apply " + this.state.nArea + " " + this.state.poundsOrOunces + " of " + this.state.fullGrade + " per " + this.state.currentArea + " " + this.state.sfOrAcres;
+    let nValues = [this.state.nResult.toFixed(2), this.state.nResult.toFixed(2), this.state.nResult.toFixed(2), NSD1.toFixed(2), PSD1.toFixed(2), KSD1.toFixed(2), this.state.score1];
+
+    let pLabel = "Apply " + this.state.pArea + " " + this.state.poundsOrOunces + " of " + this.state.fullGrade + " per " + this.state.currentArea + " " + this.state.sfOrAcres;
+    let pValues = [this.state.pResult.toFixed(2), this.state.pResult.toFixed(2), this.state.pResult.toFixed(2), NSD2.toFixed(2), PSD2.toFixed(2), KSD2.toFixed(2), this.state.score2];
+
+    let kLabel = "Apply " + this.state.kArea + " " + this.state.poundsOrOunces + " of " + this.state.fullGrade + " per " + this.state.currentArea + " " + this.state.sfOrAcres;
+    let kValues = [this.state.kResult.toFixed(2), this.state.kResult.toFixed(2), this.state.kResult.toFixed(2), NSD3.toFixed(2), PSD3.toFixed(2), KSD3.toFixed(2), this.state.score3 - 1];
+
     this.setState(
       {
-        gradeData2: [
-          ...this.state.gradeData2,
-          ["Apply " + this.state.nArea + " " + this.state.poundsOrOunces + " of " + this.state.fullGrade + " per " + this.state.currentArea + " " + this.state.sfOrAcres],
-          [this.state.nResult.toFixed(2), this.state.nResult.toFixed(2), this.state.nResult.toFixed(2), NSD1.toFixed(2), PSD1.toFixed(2), KSD1.toFixed(2), this.state.score1],
-          ["Apply " + this.state.pArea + " " + this.state.poundsOrOunces + " of " + this.state.fullGrade + " per " + this.state.currentArea + " " + this.state.sfOrAcres],
-          [this.state.pResult.toFixed(2), this.state.pResult.toFixed(2), this.state.pResult.toFixed(2), NSD2.toFixed(2), PSD2.toFixed(2), KSD2.toFixed(2), this.state.score2],
-          ["Apply " + this.state.kArea + " " + this.state.poundsOrOunces + " of " + this.state.fullGrade + " per " + this.state.currentArea + " " + this.state.sfOrAcres],
-          [this.state.kResult.toFixed(2), this.state.kResult.toFixed(2), this.state.kResult.toFixed(2), NSD3.toFixed(2), PSD3.toFixed(2), KSD3.toFixed(2), this.state.score3 - 1]
-        ]
+        gradeData2: [...this.state.gradeData2, [nLabel], nValues, [pLabel], pValues, [kLabel], kValues]
       },
       () => {
         //this.storeValues();
+        this.sortArray();
       }
     );
   }
@@ -348,8 +342,26 @@ export default class App extends Component {
     return (
       <Container>
         <Content>
-          {state.checkBoxOptions}
-          {state.checkBoxOptions2}
+          <ListItem>
+            <CheckBox checked={this.state.isChecked} onPress={() => this.setState(this.sortArray(), this.parseSelectedGrade("10-10-10"))} />
+            <Body>
+              <Text> 10 - 10 - 10</Text>
+            </Body>
+            <CheckBox onPress={() => this.setState(this.sortArray(), this.parseSelectedGrade("5-5-5"))} />
+            <Body>
+              <Text> 5 - 5 - 5</Text>
+            </Body>
+          </ListItem>
+          <ListItem>
+            <CheckBox onPress={() => this.setState(this.sortArray(), this.parseSelectedGrade("0-10-10"))} />
+            <Body>
+              <Text> 0 - 10 - 10</Text>
+            </Body>
+            <CheckBox onPress={() => this.setState(this.sortArray(), this.parseSelectedGrade("15-0-15"))} />
+            <Body>
+              <Text> 15 - 0 - 15</Text>
+            </Body>
+          </ListItem>
           <Table borderStyle={{ borderWidth: 2, borderColor: "#c8e1ff" }}>
             <Rows data={state.NPKLabel} textStyle={styles.text} />
             <Rows data={state.inputData} textStyle={styles.text} />
@@ -377,8 +389,6 @@ export default class App extends Component {
             <Rows data={state.gradeData} textStyle={styles.text} />
             <Rows data={state.gradeData2} textStyle={styles.text} />
           </Table>
-
-          <Text> {state.valueArray[0]} </Text>
         </Content>
       </Container>
     );
