@@ -16,11 +16,11 @@ export default class App extends Component {
   constructor(props) {
     super(props);
     let allowUserInput = false;
-
+    let isChecked = false;
     this.state = {
       checkBoxOptions: (
         <ListItem>
-          <CheckBox onPress={() => this.setState(this.sortArray(), this.parseSelectedGrade("10-10-10"))} />
+          <CheckBox checked={isChecked} onPress={() => this.setState(this.sortArray(), this.parseSelectedGrade("10-10-10"))} />
           <Body>
             <Text> 10 - 10 - 10</Text>
           </Body>
@@ -95,7 +95,7 @@ export default class App extends Component {
       gradeData: [["N", "P", "K", "N", "P", "K", "Score"]],
       gradeData2: [[]],
       widthArr: [160, 215],
-      defaultUnits: "Select Grade",
+      defaultUnits: "Pounds-Square Feet",
       poundsOrOunces: "",
       sfOrAcres: "",
       tempFactor: 0,
@@ -244,6 +244,7 @@ export default class App extends Component {
 
     this.setState(
       {
+        isChecked: true,
         fullGrade: grade,
         matchN: matchN,
         matchP: matchP,
