@@ -50,10 +50,7 @@ export default class App extends Component {
               defaultValue="60"
               placeholder="Enter N value"
               onChangeText={inputtedValue => {
-                this.updateNValue(inputtedValue);
-              }}
-              onEndEditing={value => {
-                this.parseSelectedGrade("10-10-10");
+                this.updateNValue(inputtedValue), this.storeValues();
               }}
             />
           </Item>,
@@ -62,7 +59,7 @@ export default class App extends Component {
               defaultValue="80"
               placeholder="Enter P value"
               onChangeText={inputtedValue => {
-                this.updatePValue(inputtedValue);
+                this.updatePValue(inputtedValue), this.storeValues();
               }}
             />
           </Item>,
@@ -71,7 +68,7 @@ export default class App extends Component {
               defaultValue="100"
               placeholder="Enter K value"
               onChangeText={inputtedValue => {
-                this.updateKValue(inputtedValue);
+                this.updateKValue(inputtedValue), this.storeValues();
               }}
               onEndEditing={inputtedValue => {}}
             />
@@ -97,7 +94,7 @@ export default class App extends Component {
       //gradeData: [["N", "P", "K", "N", "P", "K", "Score"], [1.38, 1.38, 1.38, 0.0, 0.46, 0.92, 87], [1.84, 1.84, 1.84, 0.46, 0.0, 0.46, 93]],
       gradeData: [["N", "P", "K", "N", "P", "K", "Score"]],
       gradeData2: [[]],
-      widthArr: [160, 160],
+      widthArr: [160, 215],
       defaultUnits: "Select Grade",
       poundsOrOunces: "",
       sfOrAcres: "",
@@ -178,7 +175,9 @@ export default class App extends Component {
       {
         currentPValue: value
       },
-      () => this.calculateAcreValue()
+      () => {
+        this.parseSelectedGrade("10-10-10");
+      }
     );
   }
 
@@ -188,7 +187,9 @@ export default class App extends Component {
       {
         currentKValue: value
       },
-      () => this.calculateAcreValue()
+      () => {
+        this.parseSelectedGrade("10-10-10");
+      }
     );
   }
 
@@ -327,15 +328,14 @@ export default class App extends Component {
         ]
       },
       () => {
-        this.storeValues();
+        //this.storeValues();
       }
     );
   }
 
   storeValues() {
     this.setState({
-      //valueArray: [[this.state.nResult.toFixed(2), this.state.nResult.toFixed(2), this.state.nResult.toFixed(2), 0, 0.46, 0.92, this.state.score1]]
-      //gradeData2: [[this.state.valueArray]]
+      gradeData2: [[]]
     });
   }
 
