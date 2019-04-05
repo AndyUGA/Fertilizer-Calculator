@@ -373,6 +373,7 @@ export default class App extends Component {
             <Rows data={state.area} textStyle={styles.text} />
             <Rows data={state.caclulatedValue} textStyle={styles.text} />
             <Rows data={state.nutrientsSuppliedLabel} widthArr={state.widthArr} textStyle={styles.text} />
+            <Rows data={state.gradeData} textStyle={styles.text} />
             <Rows data={state.gradeData2} textStyle={styles.text} />
           </Table>
 
