@@ -308,22 +308,36 @@ export default class App extends Component {
     let PSD3 = kResult - pResult;
     let KSD3 = kResult - kResult;
 
-    let nLabel = "Apply " + this.state.nArea + " " + this.state.poundsOrOunces + " of " + this.state.fullGrade + " per " + this.state.currentArea + " " + this.state.sfOrAcres;
+    let nLabel = ["Apply " + this.state.nArea + " " + this.state.poundsOrOunces + " of " + this.state.fullGrade + " per " + this.state.currentArea + " " + this.state.sfOrAcres];
     let nValues = [this.state.nResult.toFixed(2), this.state.nResult.toFixed(2), this.state.nResult.toFixed(2), NSD1.toFixed(2), PSD1.toFixed(2), KSD1.toFixed(2), this.state.score1];
+    if (this.state.nArea == "Infinity") {
+      nLabel = null;
+      nValues = null;
+    }
 
-    let pLabel = "Apply " + this.state.pArea + " " + this.state.poundsOrOunces + " of " + this.state.fullGrade + " per " + this.state.currentArea + " " + this.state.sfOrAcres;
+    let pLabel = ["Apply " + this.state.pArea + " " + this.state.poundsOrOunces + " of " + this.state.fullGrade + " per " + this.state.currentArea + " " + this.state.sfOrAcres];
     let pValues = [this.state.pResult.toFixed(2), this.state.pResult.toFixed(2), this.state.pResult.toFixed(2), NSD2.toFixed(2), PSD2.toFixed(2), KSD2.toFixed(2), this.state.score2];
 
-    let kLabel = "Apply " + this.state.kArea + " " + this.state.poundsOrOunces + " of " + this.state.fullGrade + " per " + this.state.currentArea + " " + this.state.sfOrAcres;
+    if (this.state.pArea == "Infinity") {
+      pLabel = null;
+      pValues = null;
+    }
+
+    let kLabel = ["Apply " + this.state.kArea + " " + this.state.poundsOrOunces + " of " + this.state.fullGrade + " per " + this.state.currentArea + " " + this.state.sfOrAcres];
     let kValues = [this.state.kResult.toFixed(2), this.state.kResult.toFixed(2), this.state.kResult.toFixed(2), NSD3.toFixed(2), PSD3.toFixed(2), KSD3.toFixed(2), this.state.score3 - 1];
+
+    if (this.state.kArea == "Infinity") {
+      kLabel = null;
+      kValues = null;
+    }
 
     this.setState(
       {
-        gradeData2: [...this.state.gradeData2, [nLabel], nValues, [pLabel], pValues, [kLabel], kValues]
+        gradeData2: [...this.state.gradeData2, nLabel, nValues, pLabel, pValues, kLabel, kValues]
       },
       () => {
         //this.storeValues();
-        this.sortArray();
+        //this.sortArray();
       }
     );
   }
@@ -343,21 +357,21 @@ export default class App extends Component {
       <Container>
         <Content>
           <ListItem>
-            <CheckBox checked={this.state.isChecked} onPress={() => this.setState(this.sortArray(), this.parseSelectedGrade("10-10-10"))} />
+            <CheckBox checked={this.state.isChecked} onPress={() => this.setState(this.parseSelectedGrade("10-10-10"))} />
             <Body>
               <Text> 10 - 10 - 10</Text>
             </Body>
-            <CheckBox onPress={() => this.setState(this.sortArray(), this.parseSelectedGrade("5-5-5"))} />
+            <CheckBox onPress={() => this.setState(this.parseSelectedGrade("5-5-5"))} />
             <Body>
               <Text> 5 - 5 - 5</Text>
             </Body>
           </ListItem>
           <ListItem>
-            <CheckBox onPress={() => this.setState(this.sortArray(), this.parseSelectedGrade("0-10-10"))} />
+            <CheckBox onPress={() => this.setState(this.parseSelectedGrade("0-10-10"))} />
             <Body>
               <Text> 0 - 10 - 10</Text>
             </Body>
-            <CheckBox onPress={() => this.setState(this.sortArray(), this.parseSelectedGrade("15-0-15"))} />
+            <CheckBox onPress={() => this.setState(this.parseSelectedGrade("15-0-15"))} />
             <Body>
               <Text> 15 - 0 - 15</Text>
             </Body>
