@@ -27,7 +27,7 @@ export default class App extends Component {
               defaultValue="60"
               placeholder="Enter N value"
               onChangeText={inputtedValue => {
-                this.updateNValue(inputtedValue), this.storeValues();
+                this.updateNValue(inputtedValue), this.clearValues();
               }}
             />
           </Item>,
@@ -36,7 +36,7 @@ export default class App extends Component {
               defaultValue="80"
               placeholder="Enter P value"
               onChangeText={inputtedValue => {
-                this.updatePValue(inputtedValue), this.storeValues();
+                this.updatePValue(inputtedValue), this.clearValues();
               }}
             />
           </Item>,
@@ -45,7 +45,7 @@ export default class App extends Component {
               defaultValue="100"
               placeholder="Enter K value"
               onChangeText={inputtedValue => {
-                this.updateKValue(inputtedValue), this.storeValues();
+                this.updateKValue(inputtedValue), this.clearValues();
               }}
               onEndEditing={inputtedValue => {}}
             />
@@ -134,9 +134,14 @@ export default class App extends Component {
 
   //Update value of acre amount
   updateAcreValue(inputtedValue) {
-    this.setState({
-      currentArea: inputtedValue
-    });
+    this.setState(
+      {
+        currentArea: inputtedValue
+      },
+      () => {
+        this.calculateAcreValue();
+      }
+    );
   }
 
   //Update value of N
@@ -234,17 +239,17 @@ export default class App extends Component {
 
     this.setState(
       {
-        //isChecked: !this.state.isChecked,
+        isChecked: !this.state.isChecked,
         fullGrade: grade,
         matchN: matchN,
         matchP: matchP,
         matchK: matchK
       },
       () => {
-        //if (this.state.isChecked == true) {
+        //  if (this.state.isChecked == true) {
         this.calculateAcreValue();
         this.calculateScore();
-        //}
+        //  }
       }
     );
   }
@@ -336,13 +341,13 @@ export default class App extends Component {
         gradeData2: [...this.state.gradeData2, nLabel, nValues, pLabel, pValues, kLabel, kValues]
       },
       () => {
-        //this.storeValues();
+        //this.clearValues();
         //this.sortArray();
       }
     );
   }
 
-  storeValues() {
+  clearValues() {
     this.setState({
       gradeData2: [[]]
     });
