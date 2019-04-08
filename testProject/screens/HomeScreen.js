@@ -70,7 +70,7 @@ export default class App extends Component {
       nutrientsSuppliedLabel: [["Nutrients supplied", "Nutrients surplus or deficit"]],
       //gradeData: [["N", "P", "K", "N", "P", "K", "Score"], [1.38, 1.38, 1.38, 0.0, 0.46, 0.92, 87], [1.84, 1.84, 1.84, 0.46, 0.0, 0.46, 93]],
       gradeData: [["N", "P", "K", "N", "P", "K", "Score"]],
-      gradeData2: [[]],
+      calculatedValues: [[]],
       widthArr: [160, 215],
       defaultUnits: "Pounds-Square Feet",
       poundsOrOunces: "",
@@ -119,7 +119,7 @@ export default class App extends Component {
   }
 
   sortArray() {
-    let tempArray = this.state.gradeData2.sort(function(a, b) {
+    let tempArray = this.state.calculatedValues.sort(function(a, b) {
       return b[6] - a[6];
     });
 
@@ -127,7 +127,7 @@ export default class App extends Component {
       return a[1] - b[1];
     });
     this.setState({
-      gradeData2: tempArray,
+      calculatedValues: tempArray,
       valueArray: fooArray
     });
   }
@@ -232,7 +232,7 @@ export default class App extends Component {
     /*
     if (this.state.isChecked == true) {
       this.setState({
-        gradeData2: [[], [], [], [], [], []]
+        calculatedValues: [[], [], [], [], [], []]
       });
     }
     */
@@ -338,7 +338,7 @@ export default class App extends Component {
 
     this.setState(
       {
-        gradeData2: [...this.state.gradeData2, nLabel, nValues, pLabel, pValues, kLabel, kValues]
+        calculatedValues: [...this.state.calculatedValues, nLabel, nValues, pLabel, pValues, kLabel, kValues]
       },
       () => {
         //this.clearValues();
@@ -349,7 +349,7 @@ export default class App extends Component {
 
   clearValues() {
     this.setState({
-      gradeData2: [[]]
+      calculatedValues: [[]]
     });
   }
 
@@ -381,6 +381,7 @@ export default class App extends Component {
               <Text> 15 - 0 - 15</Text>
             </Body>
           </ListItem>
+
           <Table borderStyle={{ borderWidth: 2, borderColor: "#c8e1ff" }}>
             <Rows data={state.NPKLabel} textStyle={styles.text} />
             <Rows data={state.inputData} textStyle={styles.text} />
@@ -406,7 +407,7 @@ export default class App extends Component {
             <Rows data={state.caclulatedValue} textStyle={styles.text} />
             <Rows data={state.nutrientsSuppliedLabel} widthArr={state.widthArr} textStyle={styles.text} />
             <Rows data={state.gradeData} textStyle={styles.text} />
-            <Rows data={state.gradeData2} textStyle={styles.text} />
+            <Rows data={state.calculatedValues} textStyle={styles.text} />
           </Table>
         </Content>
       </Container>
