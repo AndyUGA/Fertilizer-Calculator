@@ -290,7 +290,7 @@ export default class App extends Component {
     );
   }
 
-  //Calculating values relating to each row of data
+  //Calculating values relating to each row of data and storing into array
   calculateValues() {
     let nResult = this.state.nResult;
     let pResult = this.state.pResult;
@@ -362,7 +362,7 @@ export default class App extends Component {
       <Container>
         <Content>
           <ListItem>
-            <CheckBox checked={this.state.isChecked} onPress={() => this.setState(this.parseSelectedGrade("10-10-10"))} />
+            <CheckBox onPress={() => this.setState(this.parseSelectedGrade("10-10-10"))} />
             <Body>
               <Text> 10 - 10 - 10</Text>
             </Body>
