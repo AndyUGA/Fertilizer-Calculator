@@ -109,15 +109,6 @@ export default class App extends Component {
     };
   }
 
-  loadLoop() {
-    let objs = [];
-
-    for (let i = 0; i < 4; i++) {
-      objs.push(i);
-    }
-    return objs;
-  }
-
   sortArray() {
     let tempArray = this.state.calculatedValues.sort(function(a, b) {
       return b[6] - a[6];
@@ -336,15 +327,9 @@ export default class App extends Component {
       kValues = null;
     }
 
-    this.setState(
-      {
-        calculatedValues: [...this.state.calculatedValues, nLabel, nValues, pLabel, pValues, kLabel, kValues]
-      },
-      () => {
-        //this.clearValues();
-        //this.sortArray();
-      }
-    );
+    this.setState({
+      calculatedValues: [...this.state.calculatedValues, nLabel, nValues, pLabel, pValues, kLabel, kValues]
+    });
   }
 
   clearValues() {
@@ -393,7 +378,7 @@ export default class App extends Component {
                 placeholder={state.defaultUnits}
                 onValueChange={value => {
                   this.setState({ defaultUnits: value }, () => {
-                    this.calculateAcreValue();
+                    this.calculateAcreValue(), this.clearValues();
                   });
                 }}
               >
