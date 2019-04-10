@@ -18,8 +18,11 @@ export default class App extends Component {
     let allowUserInput = false;
 
     this.state = {
-      isChecked: false,
-      NPKLabel: [["N", "P", "K"]],
+      gradeTenChecked: false,
+      gradeZeroTenChecked: false,
+      gradeFiveChecked: false,
+      gradeFifteenChecked: false,
+      NPkLabel1: [["N", "P", "K"]],
       inputData: [
         [
           <Item>
@@ -105,7 +108,8 @@ export default class App extends Component {
       score2: 0,
       score3: 0,
 
-      valueArray: [["A", 10], ["B", 5], ["C", 8]]
+      valueArray: [["A", 10], ["B", 5], ["C", 8]],
+      foo: 5
     };
   }
 
@@ -221,7 +225,7 @@ export default class App extends Component {
     let matchK = gradeThree ? Math.ceil((this.state.currentKValue / gradeThree) * 100) : 0;
 
     /*
-    if (this.state.isChecked == true) {
+    if (this.state.gradeTenChecked == true) {
       this.setState({
         calculatedValues: [[], [], [], [], [], []]
       });
@@ -230,14 +234,13 @@ export default class App extends Component {
 
     this.setState(
       {
-        isChecked: !this.state.isChecked,
         fullGrade: grade,
         matchN: matchN,
         matchP: matchP,
         matchK: matchK
       },
       () => {
-        //  if (this.state.isChecked == true) {
+        //  if (this.state.gradeTenChecked == true) {
         this.calculateAcreValue();
         this.calculateScore();
         //  }
@@ -304,37 +307,75 @@ export default class App extends Component {
     let PSD3 = kResult - pResult;
     let KSD3 = kResult - kResult;
 
-    let nLabel = ["Apply " + this.state.nArea + " " + this.state.poundsOrOunces + " of " + this.state.fullGrade + " per " + this.state.currentArea + " " + this.state.sfOrAcres];
-    let nValues = [this.state.nResult.toFixed(2), this.state.nResult.toFixed(2), this.state.nResult.toFixed(2), NSD1.toFixed(2), PSD1.toFixed(2), KSD1.toFixed(2), this.state.score1];
-    if (this.state.nArea == "Infinity") {
-      nLabel = null;
-      nValues = null;
+    let nlabel1;
+    let nValues1;
+
+    if (this.state.gradeTenChecked == true && this.state.gradeFiveChecked == false) {
+      nlabel1 = ["Apply " + this.state.nArea + " " + this.state.poundsOrOunces + " of " + this.state.fullGrade + " per " + this.state.currentArea + " " + this.state.sfOrAcres];
+      nValues1 = [this.state.nResult.toFixed(2), this.state.nResult.toFixed(2), this.state.nResult.toFixed(2), NSD1.toFixed(2), PSD1.toFixed(2), KSD1.toFixed(2), this.state.score1];
+    } else if (this.state.gradeTenChecked == false) {
+      nlabel1 = null;
     }
 
-    let pLabel = ["Apply " + this.state.pArea + " " + this.state.poundsOrOunces + " of " + this.state.fullGrade + " per " + this.state.currentArea + " " + this.state.sfOrAcres];
-    let pValues = [this.state.pResult.toFixed(2), this.state.pResult.toFixed(2), this.state.pResult.toFixed(2), NSD2.toFixed(2), PSD2.toFixed(2), KSD2.toFixed(2), this.state.score2];
+    let nlabel2;
+    if (this.state.gradeFiveChecked == true) {
+      nlabel2 = ["Apply " + this.state.nArea + " " + this.state.poundsOrOunces + " of " + this.state.fullGrade + " per " + this.state.currentArea + " " + this.state.sfOrAcres];
+    }
+
+    //nValues1 = [this.state.nResult.toFixed(2), this.state.nResult.toFixed(2), this.state.nResult.toFixed(2), NSD1.toFixed(2), PSD1.toFixed(2), KSD1.toFixed(2), this.state.score1];
+    if (this.state.nArea == "Infinity") {
+      nlabel1 = null;
+      nValues1 = null;
+    }
+    let pLabel1 = ["Apply " + this.state.pArea + " " + this.state.poundsOrOunces + " of " + this.state.fullGrade + " per " + this.state.currentArea + " " + this.state.sfOrAcres];
+    let pValues1 = [this.state.pResult.toFixed(2), this.state.pResult.toFixed(2), this.state.pResult.toFixed(2), NSD2.toFixed(2), PSD2.toFixed(2), KSD2.toFixed(2), this.state.score2];
 
     if (this.state.pArea == "Infinity") {
-      pLabel = null;
-      pValues = null;
+      pLabel1 = null;
+      pValues1 = null;
     }
 
-    let kLabel = ["Apply " + this.state.kArea + " " + this.state.poundsOrOunces + " of " + this.state.fullGrade + " per " + this.state.currentArea + " " + this.state.sfOrAcres];
-    let kValues = [this.state.kResult.toFixed(2), this.state.kResult.toFixed(2), this.state.kResult.toFixed(2), NSD3.toFixed(2), PSD3.toFixed(2), KSD3.toFixed(2), this.state.score3 - 1];
+    let kLabel1 = ["Apply " + this.state.kArea + " " + this.state.poundsOrOunces + " of " + this.state.fullGrade + " per " + this.state.currentArea + " " + this.state.sfOrAcres];
+    let kValues1 = [this.state.kResult.toFixed(2), this.state.kResult.toFixed(2), this.state.kResult.toFixed(2), NSD3.toFixed(2), PSD3.toFixed(2), KSD3.toFixed(2), this.state.score3 - 1];
 
     if (this.state.kArea == "Infinity") {
-      kLabel = null;
-      kValues = null;
+      kLabel1 = null;
+      kValues1 = null;
     }
 
-    this.setState({
-      calculatedValues: [...this.state.calculatedValues, nLabel, nValues, pLabel, pValues, kLabel, kValues]
-    });
+    if (this.state.gradeTenChecked === true) {
+      this.setState({
+        //calculatedValues: [...this.state.calculatedValues, nlabel1, nValues1, pLabel1, pValues1, kLabel1, kValues1]
+        calculatedValues: [nlabel1, nValues1, pLabel1, pValues1, kLabel1, kValues1, nlabel2]
+      });
+    } else {
+      nlabel1 = null;
+      nValues1 = null;
+      pLabel1 = null;
+      pValues1 = null;
+      kLabel1 = null;
+      kValues1 = null;
+      this.setState({
+        calculatedValues: [nlabel1, nValues1, pLabel1, pValues1, kLabel1, kValues1, nlabel2]
+      });
+    }
   }
 
   clearValues() {
     this.setState({
       calculatedValues: [[]]
+    });
+  }
+
+  checkGradeTen() {
+    this.setState({
+      gradeTenChecked: !this.state.gradeTenChecked
+    });
+  }
+
+  checkGradeFive() {
+    this.setState({
+      gradeFiveChecked: !this.state.gradeFiveChecked
     });
   }
 
@@ -347,28 +388,28 @@ export default class App extends Component {
       <Container>
         <Content>
           <ListItem>
-            <CheckBox onPress={() => this.setState(this.parseSelectedGrade("10-10-10"))} />
+            <CheckBox checked={state.gradeTenChecked} onPress={() => this.setState(this.parseSelectedGrade("10-10-10"), this.checkGradeTen())} />
             <Body>
               <Text> 10 - 10 - 10</Text>
             </Body>
-            <CheckBox onPress={() => this.setState(this.parseSelectedGrade("5-5-5"))} />
+            <CheckBox checked={state.gradeFiveChecked} onPress={() => this.setState(this.parseSelectedGrade("5-5-5"), this.checkGradeFive())} />
             <Body>
               <Text> 5 - 5 - 5</Text>
             </Body>
           </ListItem>
           <ListItem>
-            <CheckBox onPress={() => this.setState(this.parseSelectedGrade("0-10-10"))} />
+            <CheckBox checked={state.gradeZeroTenChecked} onPress={() => this.setState(this.parseSelectedGrade("0-10-10"))} />
             <Body>
               <Text> 0 - 10 - 10</Text>
             </Body>
-            <CheckBox onPress={() => this.setState(this.parseSelectedGrade("15-0-15"))} />
+            <CheckBox checked={state.gradeFifteenChecked} onPress={() => this.setState(this.parseSelectedGrade("15-0-15"))} />
             <Body>
               <Text> 15 - 0 - 15</Text>
             </Body>
           </ListItem>
 
           <Table borderStyle={{ borderWidth: 2, borderColor: "#c8e1ff" }}>
-            <Rows data={state.NPKLabel} textStyle={styles.text} />
+            <Rows data={state.NPkLabel1} textStyle={styles.text} />
             <Rows data={state.inputData} textStyle={styles.text} />
             <Form>
               <Picker
