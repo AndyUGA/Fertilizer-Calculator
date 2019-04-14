@@ -23,38 +23,6 @@ export default class App extends Component {
       gradeFiveChecked: false,
       gradeFifteenChecked: false,
       NPkLabel1: [["N", "P", "K"]],
-      inputData: [
-        [
-          <Item>
-            <TextInput
-              defaultValue="60"
-              placeholder="Enter N value"
-              onChangeText={inputtedValue => {
-                this.updateNValue(inputtedValue), this.clearValues();
-              }}
-            />
-          </Item>,
-          <Item>
-            <TextInput
-              defaultValue="80"
-              placeholder="Enter P value"
-              onChangeText={inputtedValue => {
-                this.updatePValue(inputtedValue), this.clearValues();
-              }}
-            />
-          </Item>,
-          <Item>
-            <TextInput
-              defaultValue="100"
-              placeholder="Enter K value"
-              onChangeText={inputtedValue => {
-                this.updateKValue(inputtedValue), this.clearValues();
-              }}
-              onEndEditing={inputtedValue => {}}
-            />
-          </Item>
-        ]
-      ],
       currentNValue: 60,
       currentPValue: 80,
       currentKValue: 100,
@@ -361,6 +329,8 @@ export default class App extends Component {
     }
     if (grade == "0-10-10") {
       if (this.state.gradeZeroTenChecked) {
+        NSD2 = 0 - nResult;
+        NSD3 = 0 - nResult;
         let zero = 0;
         this.state.nlabel3 = null;
         this.state.nValues3 = null;
@@ -379,6 +349,8 @@ export default class App extends Component {
     }
 
     if (grade == "15-0-15") {
+      PSD1 = 0 - pResult;
+      PSD3 = 0 - pResult;
       if (this.state.gradeFifteenChecked) {
         let zero = 0;
         this.state.nlabel4 = ["Apply " + this.state.nArea + " " + this.state.poundsOrOunces + " of " + this.state.fullGrade + " per " + this.state.currentArea + " " + this.state.sfOrAcres];
@@ -490,7 +462,44 @@ export default class App extends Component {
 
           <Table borderStyle={{ borderWidth: 2, borderColor: "#c8e1ff" }}>
             <Rows data={state.NPkLabel1} textStyle={styles.text} />
-            <Rows data={state.inputData} textStyle={styles.text} />
+            <Rows
+              data={[
+                [
+                  <Item>
+                    <TextInput
+                      editable={!state.gradeTenChecked && !state.gradeFiveChecked && !state.gradeZeroTenChecked && !state.gradeFifteenChecked}
+                      defaultValue="60"
+                      placeholder="Enter N value"
+                      onChangeText={inputtedValue => {
+                        this.updateNValue(inputtedValue), this.clearValues();
+                      }}
+                    />
+                  </Item>,
+                  <Item>
+                    <TextInput
+                      editable={!state.gradeTenChecked && !state.gradeFiveChecked && !state.gradeZeroTenChecked && !state.gradeFifteenChecked}
+                      defaultValue="80"
+                      placeholder="Enter P value"
+                      onChangeText={inputtedValue => {
+                        this.updatePValue(inputtedValue), this.clearValues();
+                      }}
+                    />
+                  </Item>,
+                  <Item>
+                    <TextInput
+                      editable={!state.gradeTenChecked && !state.gradeFiveChecked && !state.gradeZeroTenChecked && !state.gradeFifteenChecked}
+                      defaultValue="100"
+                      placeholder="Enter K value"
+                      onChangeText={inputtedValue => {
+                        this.updateKValue(inputtedValue), this.clearValues();
+                      }}
+                      onEndEditing={inputtedValue => {}}
+                    />
+                  </Item>
+                ]
+              ]}
+              textStyle={styles.text}
+            />
             <Form>
               <Picker
                 mode="dropdown"
