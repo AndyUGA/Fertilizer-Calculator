@@ -502,6 +502,7 @@ export default class App extends Component {
             />
             <Form>
               <Picker
+                enabled={!state.gradeTenChecked && !state.gradeFiveChecked && !state.gradeZeroTenChecked && !state.gradeFifteenChecked}
                 mode="dropdown"
                 iosIcon={<Icon name="arrow-down" />}
                 selectedValue={state.defaultUnits}
